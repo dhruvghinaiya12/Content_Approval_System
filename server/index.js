@@ -1,6 +1,7 @@
 const express=require("express");
 const db = require("./config/db");
 const cors=require("cors");
+const ApiRoutes=require("./routes/index")
 require("dotenv").config();
 
 const PORT=process.env.PORT|| 5050;
@@ -13,8 +14,10 @@ app.use(cors({
     methods:["GET","POST","PATCH","PUT","DELETE"],
 }))
 
+app.use("/",ApiRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server is running on http://localhost:${PORT}`);
     db()
 })
+
