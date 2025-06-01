@@ -11,7 +11,7 @@ const ArticleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    author: {
+    writer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -27,10 +27,9 @@ const ArticleSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 
-const Article = mongoose.model("Article ", ArticleSchema);
-
-modul.exports=Post;
+const Article = mongoose.model("Article", ArticleSchema);
+module.exports = Article;

@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
       enum: ["writer", "admin"],
       default: "writer",
     },
+     banned: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -40,6 +40,10 @@ exports.Login = async (req, res) => {
       return res.status(404).json({ message: "User not Found" });
     }
 
+    if (user.banned) {
+      return res.status(403).json({ message: "Your account is banned. Login access is restricted." });
+    }
+
     let isMatch = await ComparePassword(user.password, password);
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect Password" });
@@ -79,6 +83,30 @@ exports.getAllWriters = async (req, res) => {
 
     const writers = await User.find({ role: "writer" }).select("-password");
     res.status(200).json(writers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.manageUser = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const { userId } = req.params;
+    const updates = req.body; 
+
+    const user = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
